@@ -6,9 +6,6 @@
 package Zombie3;
 
 import javax.swing.JFrame;
-import sun.security.jca.GetInstance;
-
-
 /**
  *
  * @author NataliaPabon

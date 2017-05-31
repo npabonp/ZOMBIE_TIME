@@ -24,7 +24,7 @@ public class Meteoritos {
 
     private int x; //alto y ancho del zombie
     private int y;
-    private int alto = 50; //alto y ancho de la meteorito
+    private int alto = 70; //alto y ancho de la meteorito
     private int ancho = 100;
     private URL choque = null;
     private AudioClip son;

@@ -17,7 +17,7 @@ public class ZOMBIETIME1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Frame1 frame = Frame1.getInstance3();
+        Frame1 frame = Frame1.getInstance();
         frame.setTitle("ZombieTime1");
         frame.setSize(800,530);
         frame.setLocationRelativeTo(null);

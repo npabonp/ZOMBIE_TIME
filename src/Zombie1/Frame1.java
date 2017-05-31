@@ -19,7 +19,7 @@ public class Frame1 extends JFrame {
         add(Nivel1.getInstance());
     }
 
-    public static Frame1 getInstance3() {
+    public static Frame1 getInstance() {
         if (instance == null) {
             instance = new Frame1();
         }

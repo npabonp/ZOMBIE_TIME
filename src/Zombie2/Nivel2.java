@@ -26,14 +26,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import zombietimee.Frame;
+import zombietimee.NivelPanel;
 
 /**
  *
  * @author Estudiante
  */
-public class Nivel2 extends JPanel implements ActionListener, MouseListener, KeyListener {
+public class Nivel2 extends NivelPanel implements ActionListener, MouseListener, KeyListener {
 
-    private Timer timer;
     private int delay = 20;
     private Image fondo;
     private Image gameOver;
@@ -44,8 +45,6 @@ public class Nivel2 extends JPanel implements ActionListener, MouseListener, Key
     private Zombie roberto = new Zombie(10, 300);
     private int clicX;
     private int clicY;
-    private URL sonido = null;
-    private AudioClip son;
     private URL choque = null;
     private AudioClip sonch;
 
@@ -54,22 +53,13 @@ public class Nivel2 extends JPanel implements ActionListener, MouseListener, Key
     private Nivel2() {
         this.addKeyListener(this);
         setFocusable(true);
-        fondo = cargarImagen("maxresdefault.jpg");
+        fondo = cargarImagen("graficaCiudad.jpg");
         timer = new Timer(delay, this);
         timer.start();
         this.addMouseListener(this);
         this.personas = new ArrayList<>();
         llenarRectangulos();
         gameOver = cargarImagen("images.png");
-
-        try {
-            sonido = new URL("file:Fondo.wav");
-            son = Applet.newAudioClip(sonido);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(Nivel2.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        son.loop();
-
     }
 
     public static Nivel2 getInstance() {
@@ -93,77 +83,84 @@ public class Nivel2 extends JPanel implements ActionListener, MouseListener, Key
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (roberto.getColisiones() < 10) {
-            for (int i = 0; i < 4; i++) {
-                g.drawImage(fondo, roberto.getFondox(), 0, 2000, 500, null);
-            }
-
-            /*if (roberto.getPoderes() > 100 && (roberto.getColisiones() < 10 && roberto.getColisiones() > 0)) {
-                roberto.setColisiones(roberto.getColisiones() - 1);
-            }*/
-            roberto.paintComponent(g, this);
-
-            g.drawString("Poderes", 400, 30);
-            g.drawString(": " + roberto.getPoderes(), 470, 30);
-
-            g.drawString("Colisiones", 600, 30);
-            g.drawString(": " + roberto.getColisiones(), 670, 30);
-
-            for (Rayito rayote : rayitos) {
-                if (rayote.isAlive()) {
-                    rayote.paintComponent(g, this, rayote.getX(), rayote.getY());
-                    rayote.decreaseLife();
-                } else {
-                    apagados.add(rayote);
+        if (playing) {
+            if (roberto.getColisiones() < 10) {
+                for (int i = 0; i < 4; i++) {
+                    g.drawImage(fondo, roberto.getFondox(), 0, 2000, 500, null);
                 }
-            }
-            for (Rayito muere : apagados) {
-                rayitos.remove(muere);
-            }
-            apagados = new ArrayList<>();
+                if (personas.isEmpty()) {
+                    Frame frame = Frame.getInstance();
+                    frame.setVisible(true);
+                    frame.setNivel(3);
+                }
 
-            Rectangle r = new Rectangle(roberto.getX(), roberto.getY(), roberto.getWidth(), roberto.getHeight());
+                if (roberto.getPoderes() > 1000 && (roberto.getColisiones() < 10 && roberto.getColisiones() > 0)) {
+                    roberto.setColisiones(roberto.getColisiones() - 1);
+                    roberto.setPoderes(roberto.getPoderes() - 1000);
+                }
 
-            for (int i = 0; i < personas.size(); i++) {
-                int xr = this.personas.get(i).getX();
-                int yr = this.personas.get(i).getY();
-                if (personas.get(i).getVidas() > 0) {
-                    personas.get(i).paintComponent(g, this);
-                    
+                roberto.paintComponent(g, this);
 
-                    Rectangle m = new Rectangle(xr, yr, 60, 97);
+                g.drawString("Poderes", 400, 30);
+                g.drawString(": " + roberto.getPoderes(), 470, 30);
 
-                    if (r.intersects(m)) {
-                        try {
-                            choque = new URL("file:OUTCH.wav");
-                            sonch = Applet.newAudioClip(choque);
-                         
-                        } catch (MalformedURLException ex) {
-                            Logger.getLogger(Nivel2.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        sonch.play();
+                g.drawString("Colisiones", 600, 30);
+                g.drawString(": " + roberto.getColisiones(), 670, 30);
 
-                        roberto.setColisiones(roberto.getColisiones() + 1);
-                        for (Persona rec : personas) {
-                            if((rec.getX() == xr) && (rec.getY() == yr)) {
-                                muertos.add(rec);
-                                break;
+                for (Rayito rayote : rayitos) {
+                    if (rayote.isAlive()) {
+                        rayote.paintComponent(g, this, rayote.getX(), rayote.getY());
+                        rayote.decreaseLife();
+                    } else {
+                        apagados.add(rayote);
+                    }
+                }
+                for (Rayito muere : apagados) {
+                    rayitos.remove(muere);
+                }
+                apagados = new ArrayList<>();
+
+                Rectangle r = new Rectangle(roberto.getX(), roberto.getY(), roberto.getWidth(), roberto.getHeight());
+
+                for (int i = 0; i < personas.size(); i++) {
+                    int xr = this.personas.get(i).getX();
+                    int yr = this.personas.get(i).getY();
+                    if (personas.get(i).getVidas() > 0) {
+                        personas.get(i).paintComponent(g, this);
+
+                        Rectangle m = new Rectangle(xr, yr, 60, 97);
+
+                        if (r.intersects(m)) {
+                            try {
+                                choque = new URL("file:OUTCH.wav");
+                                sonch = Applet.newAudioClip(choque);
+
+                            } catch (MalformedURLException ex) {
+                                Logger.getLogger(Nivel2.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            sonch.play();
+
+                            roberto.setColisiones(roberto.getColisiones() + 1);
+                            for (Persona rec : personas) {
+                                if ((rec.getX() == xr) && (rec.getY() == yr)) {
+                                    muertos.add(rec);
+                                    break;
+                                }
                             }
                         }
+                    } else {
+                        muertos.add(personas.get(i));
                     }
-                } else {
-                    muertos.add(personas.get(i));
                 }
-            }
-            for (Persona dead : muertos) {
-                personas.remove(dead);
-            }
-            muertos = new ArrayList<>();
+                for (Persona dead : muertos) {
+                    personas.remove(dead);
+                }
+                muertos = new ArrayList<>();
 
-        } else {
-            g.drawImage(gameOver, 0, 0, 800, 500, null);
+            } else {
+                g.drawImage(gameOver, 0, 0, 800, 500, null);
+            }
         }
-
     }
 
     @Override

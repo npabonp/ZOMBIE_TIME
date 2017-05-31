@@ -5,6 +5,7 @@
  */
 package zombietimee;
 
+import Zombie1.Nivel1;
 import javax.swing.JFrame;
 
 /**
@@ -17,13 +18,9 @@ public class ZOMBIETIMEE {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Frame frame = new Frame();
-        frame.setTitle("ZOMBIE TIME");
-        frame.setSize(800, 530);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Frame frame = Frame.getInstance();
         frame.setVisible(true);
-        frame.setNivel(1);
+        frame.setNivel(2);
     }
 
 }

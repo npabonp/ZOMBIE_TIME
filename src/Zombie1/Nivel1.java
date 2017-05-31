@@ -17,51 +17,41 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import zombietimee.Frame;
+import zombietimee.NivelPanel;
 
 /**
  *
  * @author NataliaPabon
  */
-public final class Nivel1 extends JPanel implements ActionListener, KeyListener {
+public final class Nivel1 extends NivelPanel implements ActionListener, KeyListener {
 
     private static Nivel1 instance = null;
-
     private int m; // meteoritos
     private int k;
     private Zombie roberto = new Zombie(100, 350);
-    private Timer timer;
-    private int delay = 20;
+
     private Color color;
     private int secuencia;
     private Image zombieimg;
     private Image fondo;
     private Image MEteoros;
     private Image gameOver;
-    private URL sonido = null;
-    private AudioClip son;
     private ArrayList<Meteoritos> bordeMeteoritos;
     private ArrayList<Meteoritos> colision = new ArrayList<>();
 
     private Nivel1() {
+        super();
         this.addKeyListener(this);
         setFocusable(true);
         zombieimg = loadImage("ZRunn.png");
         fondo = loadImage("fondo1.jpg");
         MEteoros = loadImage("meteorito.png");
         gameOver = loadImage("images.png");
-        timer = new Timer(delay, this);
-        timer.start();
-        this.bordeMeteoritos = new ArrayList<>();
-        Meteoross();
 
-        try {
-            sonido = new URL("file:Fondo.wav");
-            son = Applet.newAudioClip(sonido);
-            
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(Nivel1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        son.loop();
+        timer = new Timer(delay, this);
+
+        this.bordeMeteoritos = new ArrayList<>();
     }
 
     public static Nivel1 getInstance() {
@@ -71,60 +61,75 @@ public final class Nivel1 extends JPanel implements ActionListener, KeyListener 
         return instance;
     }
 
+    @Override
+    public void start() {
+        super.start();
+        Meteoross();
+    }
+
     public void Meteoross() {
         int iniX = 100;
         int iniY = 20;
         Random k = new Random();
-        for (int i = 0; i < 80; i++) {
+        this.bordeMeteoritos = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
+            iniX = 100 + Math.abs(k.nextInt() % (900));
+            iniY = -(Math.abs(k.nextInt() % 50));
+            this.bordeMeteoritos.add(new Meteoritos(iniX, iniY));
+        }
+       /* for (int i = 0; i < 1; i++) {
             iniX = 100 + Math.abs(k.nextInt() % (900));
             iniY = -(Math.abs(k.nextInt() % 5000));
             this.bordeMeteoritos.add(new Meteoritos(iniX, iniY));
-        }
+        }*/
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        if (playing) {
+            super.paintComponent(g);
 
-        if (roberto.getColisiones() < 10) {
             if (roberto.getColisiones() < 10) {
-                for (int i = 0; i < k; i++) {
-                    g.drawImage(fondo, -k + (i * 800), 0, 800, 500, this);
+                if (roberto.getColisiones() < 10) {
+                    for (int i = 0; i < k; i++) {
+                        g.drawImage(fondo, -k + (i * 800), 0, 800, 500, this);
+                    }
                 }
-            }
-            if (bordeMeteoritos.isEmpty()) {
-                System.out.println("HAZ GANADOO");
-            }
-            g.drawImage(zombieimg, roberto.getX1(), 350, roberto.getX2(), 464,
-                    (this.secuencia * 322), 0, (this.secuencia * 322) + 322, 388, this);
-            g.drawString("Colisiones", 600, 30);
-            g.drawString(": " + roberto.getColisiones(), 670, 30);
-            int xr = 0;
-            int yr = 0;
-            for (int i = 0; i < bordeMeteoritos.size(); i++) {
-                Random l = new Random();
-                int in = Math.abs(l.nextInt() % 6000);
-                xr = this.bordeMeteoritos.get(i).getX();
-                yr = this.bordeMeteoritos.get(i).getY();
+                
+                g.drawImage(zombieimg, roberto.getX1(), 350, roberto.getX2(), 464,
+                        (this.secuencia * 322), 0, (this.secuencia * 322) + 322, 388, this);
+                g.drawString("Colisiones", 600, 30);
+                g.drawString(": " + roberto.getColisiones(), 670, 30);
+                int xr = 0;
+                int yr = 0;
+                for (int i = 0; i < bordeMeteoritos.size(); i++) {
+                    Random l = new Random();
+                    int in = Math.abs(l.nextInt() % 6000);
+                    xr = this.bordeMeteoritos.get(i).getX();
+                    yr = this.bordeMeteoritos.get(i).getY();
 
-                if (this.bordeMeteoritos.get(i).getY() > 500) {
+                    if (this.bordeMeteoritos.get(i).getY() > 500) {
+                        bordeMeteoritos.remove(i);
+                        continue;
+                    }
+                    g.drawImage(MEteoros, xr, yr, 60, 100, this);
 
-                    bordeMeteoritos.remove(i);
-                    continue;
+                    this.bordeMeteoritos.get(i).setY(this.bordeMeteoritos.get(i).getY() + 1);
+                    this.bordeMeteoritos.get(i).setX(this.bordeMeteoritos.get(i).getX() - 1);
+                    if (this.bordeMeteoritos.get(i).Colision(roberto)) {
+                        roberto.setColisiones(roberto.getColisiones() + 1);
+                        bordeMeteoritos.remove(i);
+                    }
                 }
-                g.drawImage(MEteoros, xr, yr, 60, 100, this);
-
-                this.bordeMeteoritos.get(i).setY(this.bordeMeteoritos.get(i).getY() + 1);
-                this.bordeMeteoritos.get(i).setX(this.bordeMeteoritos.get(i).getX() - 1);
-                if (this.bordeMeteoritos.get(i).Colision(roberto)) {
-                    roberto.setColisiones(roberto.getColisiones() + 1);
-                    bordeMeteoritos.remove(i);
+                if (bordeMeteoritos.size() == 0) {
+                    Frame frame2 = Frame.getInstance();
+                    frame2.setVisible(true);
+                    frame2.setNivel(2);
                 }
+            } else {
+                g.drawImage(gameOver, 0, 0, 800, 500, null);
             }
-        } else {
-            g.drawImage(gameOver, 0, 0, 800, 500, null);
         }
-
     }
 
     @Override

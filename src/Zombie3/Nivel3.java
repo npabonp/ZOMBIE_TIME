@@ -18,19 +18,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+import zombietimee.Frame;
+import zombietimee.NewJFrameFIN;
+import zombietimee.NivelPanel;
 
 /**
  *
  * @author NataliaPabon
  */
-public final class Nivel3 extends JPanel implements ActionListener, KeyListener {
+public final class Nivel3 extends NivelPanel implements ActionListener, KeyListener {
 
     private static Nivel3 instance = null;
 
     private int m; // meteoritos
 
     private Zombie roberto = new Zombie(100, 350);
-    private Timer timer;
     private int delay = 20;
     private Color color;
     private int secuencia;
@@ -38,8 +41,6 @@ public final class Nivel3 extends JPanel implements ActionListener, KeyListener 
     private Image fondo;
     private Image naveEspacial;
     private Image gameOver;
-    private URL sonido = null;
-    private AudioClip son;
 
     private ArrayList<Naves> bordeNaves;
     private ArrayList<Naves> colision = new ArrayList<>();
@@ -56,15 +57,7 @@ public final class Nivel3 extends JPanel implements ActionListener, KeyListener 
         timer.start();
         this.bordeNaves = new ArrayList<>();
         navecitas();
-        
-        try {
-            sonido = new URL("file:Fondo.wav");
-            son = Applet.newAudioClip(sonido);
-            
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(Nivel3.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        son.loop();
+
     }
 
     public static Nivel3 getInstance() {
@@ -78,20 +71,28 @@ public final class Nivel3 extends JPanel implements ActionListener, KeyListener 
         int iniX = 100;
         int iniY = 2;
         Random k = new Random();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5; i++) {
+            iniX = Math.abs(k.nextInt() % (800 - 80));
+            iniY = -(Math.abs(k.nextInt() % 50));
+            this.bordeNaves.add(new Naves(iniX, iniY));
+        }
+       /*  for (int i = 0; i < 50; i++) {
             iniX = Math.abs(k.nextInt() % (800 - 80));
             iniY = -(Math.abs(k.nextInt() % 5000));
             this.bordeNaves.add(new Naves(iniX, iniY));
-        }
+        }*/
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(fondo, 0, 0, 800, 500, null);
+        if (playing) {
         if (roberto.getColisiones() < 10) {
             if (bordeNaves.isEmpty()) {
-                System.out.println("HAZ GANADOO");
+                 Frame frameFin = NewJFrameFIN.getInstance();
+                    frameFin.setVisible(true);
+                   
             }
             g.drawImage(zombieimg, roberto.getX1(), 350, roberto.getX2(), 464,
                     (this.secuencia * 322), 0, (this.secuencia * 322) + 322, 388, this);
@@ -128,7 +129,7 @@ public final class Nivel3 extends JPanel implements ActionListener, KeyListener 
         } else {
             g.drawImage(gameOver, 0, 0, 800, 500, null);
         }
-
+        }
     }
 
     @Override
