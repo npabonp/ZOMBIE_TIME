@@ -33,7 +33,7 @@ public final class Nivel3 extends NivelPanel implements ActionListener, KeyListe
 
     private int m; // meteoritos
 
-    private Zombie roberto = new Zombie(100, 350);
+    private Zombie roberto = new Zombie();
     private int delay = 20;
     private Color color;
     private int secuencia;
@@ -42,11 +42,13 @@ public final class Nivel3 extends NivelPanel implements ActionListener, KeyListe
     private Image naveEspacial;
     private Image gameOver;
 
+
     private ArrayList<Naves> bordeNaves;
     private ArrayList<Naves> colision = new ArrayList<>();
 
     private Nivel3() {
-
+        roberto.setX(100);
+        roberto.setY(350);
         this.addKeyListener(this);
         setFocusable(true);
         zombieimg = loadImage("ZRunn.png");
@@ -90,8 +92,10 @@ public final class Nivel3 extends NivelPanel implements ActionListener, KeyListe
         if (playing) {
         if (roberto.getColisiones() < 10) {
             if (bordeNaves.isEmpty()) {
-                 Frame frameFin = NewJFrameFIN.getInstance();
+                 NewJFrameFIN frameFin = NewJFrameFIN.getInstance();
+                 
                     frameFin.setVisible(true);
+                    
                    
             }
             g.drawImage(zombieimg, roberto.getX1(), 350, roberto.getX2(), 464,
@@ -121,7 +125,6 @@ public final class Nivel3 extends NivelPanel implements ActionListener, KeyListe
                 this.bordeNaves.get(i).setY(this.bordeNaves.get(i).getY() + 4);
 
                 if (this.bordeNaves.get(i).Colision(roberto)) {
-                    System.out.println("colisiion!!!");
                     roberto.setColisiones(roberto.getColisiones() + 1);
                     bordeNaves.remove(i);
                 }

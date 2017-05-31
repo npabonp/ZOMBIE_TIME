@@ -5,6 +5,13 @@
  */
 package zombietimee;
 
+import Archivos.Puntajes;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import zombietimee.Frame;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -20,11 +27,44 @@ public class NewJFrame extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    private String nombre;
+    Archivos.Puntajes p = new Archivos.Puntajes();
+    Archivos.Jugador j = new Archivos.Jugador();
+            
+    private File f = new File("puntajes");
+    private String nombre ;
 
+    public Puntajes getP() {
+        return p;
+    }
+
+    public void setP(Puntajes p) {
+        this.p = p;
+    }
+
+    public File getF() {
+        return f;
+    }
+
+    public void setF(File f) {
+        this.f = f;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
     public NewJFrame() {
         setContentPane(new JLabel(new ImageIcon("Inicio.png")));
         initComponents();
+    }
+
+    private void crearArchivo() throws IOException {
+        f.createNewFile();
     }
 
     /**
@@ -55,6 +95,11 @@ public class NewJFrame extends javax.swing.JFrame {
         });
 
         jButton2.setText("2.MOSTRAR MEJORES PUNTAJES");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -65,21 +110,21 @@ public class NewJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(225, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(195, 195, 195)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2))
-                .addGap(192, 192, 192))
+                .addContainerGap(222, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(259, Short.MAX_VALUE)
+                .addContainerGap(263, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
+                .addGap(43, 43, 43)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57))
+                .addGap(59, 59, 59))
         );
 
         pack();
@@ -99,6 +144,20 @@ public class NewJFrame extends javax.swing.JFrame {
         frame.setVisible(true);
         frame.setNivel(1);
     }//GEN-LAST:event_jButton1MouseClicked
+
+    
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        try {
+            p.leerPuntajes(f);
+            p.escribirPuntajes(f);
+        } catch (IOException ex) {
+            Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String puntajes = p.getInf();
+        System.out.println(puntajes);
+         JOptionPane.showMessageDialog(null,puntajes);
+
+    }//GEN-LAST:event_jButton2MouseClicked
 
     /**
      * @param args the command line arguments

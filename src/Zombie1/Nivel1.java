@@ -24,13 +24,12 @@ import zombietimee.NivelPanel;
  *
  * @author NataliaPabon
  */
-public final class Nivel1 extends NivelPanel implements ActionListener, KeyListener {
+public final class Nivel1 extends NivelPanel {
 
     private static Nivel1 instance = null;
     private int m; // meteoritos
     private int k;
-    private Zombie roberto = new Zombie(100, 350);
-
+    private Zombie roberto = new Zombie();
     private Color color;
     private int secuencia;
     private Image zombieimg;
@@ -39,21 +38,27 @@ public final class Nivel1 extends NivelPanel implements ActionListener, KeyListe
     private Image gameOver;
     private ArrayList<Meteoritos> bordeMeteoritos;
     private ArrayList<Meteoritos> colision = new ArrayList<>();
-
+    private Nivel1KeyListener keyListener;
+    
     private Nivel1() {
         super();
-        this.addKeyListener(this);
+        roberto.setX(100);
+        roberto.setY(350);
         setFocusable(true);
         zombieimg = loadImage("ZRunn.png");
         fondo = loadImage("fondo1.jpg");
         MEteoros = loadImage("meteorito.png");
         gameOver = loadImage("images.png");
-
-        timer = new Timer(delay, this);
+keyListener=new Nivel1KeyListener();
+        timer = new Timer(delay, keyListener);
 
         this.bordeMeteoritos = new ArrayList<>();
     }
 
+    public KeyListener getKeyListener(){
+        return keyListener;
+    }
+    
     public static Nivel1 getInstance() {
         if (instance == null) {
             instance = new Nivel1();
@@ -65,8 +70,14 @@ public final class Nivel1 extends NivelPanel implements ActionListener, KeyListe
     public void start() {
         super.start();
         Meteoross();
+        this.addKeyListener(keyListener);
     }
 
+    public void stop(){
+        super.stop();
+        this.removeKeyListener(keyListener);
+     }
+    
     public void Meteoross() {
         int iniX = 100;
         int iniY = 20;
@@ -123,6 +134,7 @@ public final class Nivel1 extends NivelPanel implements ActionListener, KeyListe
                 }
                 if (bordeMeteoritos.size() == 0) {
                     Frame frame2 = Frame.getInstance();
+                    
                     frame2.setVisible(true);
                     frame2.setNivel(2);
                 }
@@ -132,38 +144,37 @@ public final class Nivel1 extends NivelPanel implements ActionListener, KeyListe
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        k += 3;
-        repaint();
-    }
-
     public Image loadImage(String imageName) {
         ImageIcon im = new ImageIcon(imageName);
         Image image = im.getImage();
         return image;
     }
 
+    
+    
+    
+    class Nivel1KeyListener implements ActionListener, KeyListener {
+    
     @Override
     public void keyPressed(KeyEvent ke) {
         int key = ke.getKeyCode();
         if (key == KeyEvent.VK_RIGHT && roberto.getX() + 10 < 700) {
             roberto.setDireccion(true);
             roberto.setX(roberto.getX() + 10);
-            if (this.secuencia == 9) {
-                this.secuencia = 0;
+            if (secuencia == 9) {
+                secuencia = 0;
             } else {
-                this.secuencia++;
+                secuencia++;
             }
 
         }
         if (key == KeyEvent.VK_LEFT && roberto.getX() - 10 > 0) {
             roberto.setDireccion(false);
             roberto.setX(roberto.getX() - 10);
-            if (this.secuencia == 0) {
-                this.secuencia = 9;
+            if (secuencia == 0) {
+                secuencia = 9;
             } else {
-                this.secuencia--;
+                secuencia--;
             }
         }
     }
@@ -177,4 +188,12 @@ public final class Nivel1 extends NivelPanel implements ActionListener, KeyListe
     public void keyReleased(KeyEvent ke) {
 
     }
+
+           @Override
+    public void actionPerformed(ActionEvent ae) {
+        k += 3;
+        repaint();
+    }
+}
+    
 }

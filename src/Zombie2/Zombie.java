@@ -28,7 +28,7 @@ public class Zombie {
     private int poderes;
 
 
-    public Zombie(int x, int y) {
+    public Zombie() {
         this.x = x;
         this.y = y;
         zombie = cargarImagen("ZRunn.png");

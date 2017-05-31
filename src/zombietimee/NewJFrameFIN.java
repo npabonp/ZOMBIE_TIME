@@ -13,7 +13,9 @@ import javax.swing.JLabel;
  * @author jeisson
  */
 public class NewJFrameFIN extends javax.swing.JFrame {
-private static Frame instance;
+
+    private static NewJFrameFIN instance;
+
     /**
      * Creates new form NewJFrameFIN
      */
@@ -21,12 +23,14 @@ private static Frame instance;
         setContentPane(new JLabel(new ImageIcon("1.png")));
         initComponents();
     }
-public static Frame getInstance() {
+
+    public static NewJFrameFIN getInstance() {
         if (instance == null) {
-            instance = new Frame();
+            instance = new NewJFrameFIN();
         }
         return instance;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,15 +74,15 @@ public static Frame getInstance() {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(110, 110, 110)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(0, 134, Short.MAX_VALUE))
+                .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(336, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton2)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -92,7 +96,7 @@ public static Frame getInstance() {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-        
+        System.exit(0);
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked

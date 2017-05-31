@@ -42,7 +42,7 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
     private ArrayList<Persona> muertos = new ArrayList<>();
     private ArrayList<Rayito> rayitos = new ArrayList<>();
     private ArrayList<Rayito> apagados = new ArrayList<>();
-    private Zombie roberto = new Zombie(10, 300);
+    private Zombie roberto = new Zombie();
     private int clicX;
     private int clicY;
     private URL choque = null;
@@ -51,16 +51,26 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
     private static Nivel2 instance = null;
 
     private Nivel2() {
-        this.addKeyListener(this);
+        super();
+        roberto.setX(10);
+        roberto.setY(300);
         setFocusable(true);
         fondo = cargarImagen("graficaCiudad.jpg");
         timer = new Timer(delay, this);
-        timer.start();
         this.addMouseListener(this);
         this.personas = new ArrayList<>();
-        llenarRectangulos();
         gameOver = cargarImagen("images.png");
     }
+    
+    public void start(){
+        super.start();
+            llenarRectangulos();
+            this.addKeyListener(this);
+    }
+     public void stop(){
+        super.stop();
+        this.removeKeyListener(this);
+     }
 
     public static Nivel2 getInstance() {
         if (instance == null) {
@@ -73,7 +83,7 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
         Random r = new Random();
         int iniX = 500;
         int iniY = 0;
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 2; i++) {
             iniX += 60 + Math.abs(r.nextInt() % 71);
             iniY = 250 + Math.abs(r.nextInt() % 130);
             this.personas.add(new Persona(iniX, iniY));
@@ -85,14 +95,10 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
         super.paintComponent(g);
         if (playing) {
             if (roberto.getColisiones() < 10) {
-                for (int i = 0; i < 4; i++) {
+                //for (int i = 0; i < 4; i++) {
                     g.drawImage(fondo, roberto.getFondox(), 0, 2000, 500, null);
-                }
-                if (personas.isEmpty()) {
-                    Frame frame = Frame.getInstance();
-                    frame.setVisible(true);
-                    frame.setNivel(3);
-                }
+                //}
+                
 
                 if (roberto.getPoderes() > 1000 && (roberto.getColisiones() < 10 && roberto.getColisiones() > 0)) {
                     roberto.setColisiones(roberto.getColisiones() - 1);
@@ -155,6 +161,12 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
                 for (Persona dead : muertos) {
                     personas.remove(dead);
                 }
+                if (personas.size()==0) {
+                    Frame frame = Frame.getInstance();
+                    frame.setVisible(true);
+                    frame.setNivel(3);
+                    
+                }
                 muertos = new ArrayList<>();
 
             } else {
@@ -189,6 +201,7 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
     @Override
     public void mouseReleased(MouseEvent e) {
         Point mp = e.getPoint();
+        
         for (Persona rec : this.personas) {
             if (rec.contains(mp)) {
                 clicX = rec.getX();
@@ -228,5 +241,6 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
     @Override
     public void keyPressed(KeyEvent ke) {
         roberto.keyPressed(ke);
+        System.out.println("Tecla nivel 2");
     }
 }

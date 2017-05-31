@@ -18,7 +18,7 @@ public class Zombie {
     private int ancho = 108;
     private int alto = 90;
 
-    public Zombie(int x, int y) {
+    public Zombie() {
         this.x = x;
         this.y = y;
         direccion = true;
