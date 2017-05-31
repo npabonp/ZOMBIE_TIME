@@ -69,7 +69,7 @@ public class Puntajes {
     public void escribirPuntajes(File f) throws IOException {
         PrintStream out = new PrintStream(f);
         for (Jugador j : jugadores.values()) {
-            out.println(j.getNombre() + " " + j.getMaxPuntaje());
+            System.out.println(j.getNombre() + " " + j.getMaxPuntaje());
             System.out.println("sfxbdgb");
         }
     }

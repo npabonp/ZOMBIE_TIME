@@ -83,16 +83,16 @@ keyListener=new Nivel1KeyListener();
         int iniY = 20;
         Random k = new Random();
         this.bordeMeteoritos = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
+       /* for (int i = 0; i < 1; i++) {
             iniX = 100 + Math.abs(k.nextInt() % (900));
             iniY = -(Math.abs(k.nextInt() % 50));
             this.bordeMeteoritos.add(new Meteoritos(iniX, iniY));
-        }
-       /* for (int i = 0; i < 1; i++) {
+        */
+        for (int i = 0; i < 15; i++) {
             iniX = 100 + Math.abs(k.nextInt() % (900));
-            iniY = -(Math.abs(k.nextInt() % 5000));
+            iniY = -(Math.abs(k.nextInt() % 500));
             this.bordeMeteoritos.add(new Meteoritos(iniX, iniY));
-        }*/
+        }
     }
 
     @Override
@@ -125,8 +125,8 @@ keyListener=new Nivel1KeyListener();
                     }
                     g.drawImage(MEteoros, xr, yr, 60, 100, this);
 
-                    this.bordeMeteoritos.get(i).setY(this.bordeMeteoritos.get(i).getY() + 1);
-                    this.bordeMeteoritos.get(i).setX(this.bordeMeteoritos.get(i).getX() - 1);
+                    this.bordeMeteoritos.get(i).setY(this.bordeMeteoritos.get(i).getY() + 2);
+                    this.bordeMeteoritos.get(i).setX(this.bordeMeteoritos.get(i).getX() - 2);
                     if (this.bordeMeteoritos.get(i).Colision(roberto)) {
                         roberto.setColisiones(roberto.getColisiones() + 1);
                         bordeMeteoritos.remove(i);

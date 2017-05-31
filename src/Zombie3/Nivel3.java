@@ -73,16 +73,12 @@ public final class Nivel3 extends NivelPanel implements ActionListener, KeyListe
         int iniX = 100;
         int iniY = 2;
         Random k = new Random();
-        for (int i = 0; i < 5; i++) {
-            iniX = Math.abs(k.nextInt() % (800 - 80));
-            iniY = -(Math.abs(k.nextInt() % 50));
-            this.bordeNaves.add(new Naves(iniX, iniY));
-        }
-       /*  for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             iniX = Math.abs(k.nextInt() % (800 - 80));
             iniY = -(Math.abs(k.nextInt() % 5000));
             this.bordeNaves.add(new Naves(iniX, iniY));
-        }*/
+        }
+     
     }
 
     @Override

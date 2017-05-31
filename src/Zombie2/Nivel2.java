@@ -83,7 +83,7 @@ public class Nivel2 extends NivelPanel implements ActionListener, MouseListener,
         Random r = new Random();
         int iniX = 500;
         int iniY = 0;
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 20; i++) {
             iniX += 60 + Math.abs(r.nextInt() % 71);
             iniY = 250 + Math.abs(r.nextInt() % 130);
             this.personas.add(new Persona(iniX, iniY));
